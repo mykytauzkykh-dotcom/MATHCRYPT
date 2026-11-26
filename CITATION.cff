@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+type: software
+title: "MATHCRYPT 6.0: An Interactive Computational Research Platform for Diophantine Equations, Number Theory, and Modern Cryptography"
+version: "6.0.0"
+license: MIT
+doi: "10.5281/zenodo.24540765"
+url: "https://quiet-haupia-3167e1.netlify.app"
+# date-released: "YYYY-MM-DD"   # optional
+authors:
+  - family-names: "Uzkykh"
+    given-names: "Mykyta"
+    # orcid: "https://orcid.org/XXXX-XXXX-XXXX-XXXX"   # optional
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24540765"
+    description: "DOI of the scientific software MATHCRYPT 6.0.0 (Zenodo)"
+  - type: url
+    value: "https://doi.org/10.5281/zenodo.24540765"
+    description: "DOI URL"
+  - type: url
+    value: "https://quiet-haupia-3167e1.netlify.app"
+    description: "Online platform"
+abstract: "Browser-based educational and research platform for Diophantine equations, number theory and cryptography with reproducible experiments."
+keywords:
+  - Diophantine equations
+  - Euclidean algorithm
+  - number theory
+  - cryptography
+  - RSA
+  - lattices
+  - reproducible research
+preferred-citation:
+  type: software
+  title: "MATHCRYPT 6.0: An Interactive Computational Research Platform for Diophantine Equations, Number Theory, and Modern Cryptography"
+  version: "6.0.0"
+  year: 2026
+  doi: "10.5281/zenodo.24540765"
+  url: "https://doi.org/10.5281/zenodo.24540765"
+  publisher:
+    name: "Zenodo"
+  authors:
+    - family-names: "Uzkykh"
+      given-names: "Mykyta"
+# repository-code: "https://github.com/FILL_IN/FILL_IN"

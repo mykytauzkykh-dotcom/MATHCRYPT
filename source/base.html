@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MATHCRYPT — математика та криптографія</title>
+<style>
+:root{--bg:#F5E9EC;--panel:#fff;--ink:#24151B;--mut:#6B4A55;--acc:#A32645;--acc2:#A32645;--line:#E3C9D1;--btn:#4A1022;--btnink:#F5E9EC;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#120D10;--panel:#24151B;--ink:#F5E9EC;--mut:#C7AAB2;--acc2:#D94A68;--line:#56303B}}
+:root[data-theme="dark"]{--bg:#120D10;--panel:#24151B;--ink:#F5E9EC;--mut:#C7AAB2;--acc2:#D94A68;--line:#56303B}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+header{padding:28px 20px 14px;max-width:980px;margin:0 auto}
+h1{margin:0;font:800 clamp(28px,6vw,44px)/1.1 Georgia,"Times New Roman",serif;color:var(--acc2);letter-spacing:.5px}
+header p{margin:6px 0 0;color:var(--mut)}
+nav{display:flex;gap:6px;overflow-x:auto;max-width:980px;margin:0 auto;padding:6px 20px 0}
+nav button{flex:none;border:0;background:var(--btn);color:var(--btnink);padding:10px 15px;border-radius:8px 8px 0 0;font:600 14px inherit;font-family:inherit;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--acc);color:#fff}
+main{max-width:980px;margin:0 auto;padding:0 20px 30px}
+section{display:none;background:var(--panel);border:2px solid var(--acc);border-radius:0 10px 10px 10px;padding:20px}
+section.on{display:block}
+h2{margin:0 0 12px;font:700 22px/1.25 Georgia,serif}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin:10px 0}
+label{display:flex;flex-direction:column;gap:4px;font-weight:600;color:var(--acc2);font-size:14px}
+input,select,textarea{font:16px inherit;font-family:inherit;padding:9px 11px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);min-width:0}
+input.s{width:110px}input.w{width:100%}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--acc2);outline-offset:2px}
+.b{border:0;border-radius:6px;padding:10px 16px;background:var(--btn);color:var(--btnink);font:700 14px inherit;font-family:inherit;cursor:pointer}
+.b.m{background:var(--acc);color:#fff}
+.b:hover{filter:brightness(1.15)}
+pre{margin:10px 0;padding:12px 14px;background:var(--bg);border:1px solid var(--line);border-radius:6px;font:13.5px/1.55 ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-word;max-height:380px;overflow:auto}
+.err{color:var(--acc2);font-weight:600;min-height:1.4em;margin:4px 0}
+.ok{color:#2e9e5b}
+.wide{overflow-x:auto}
+svg{width:100%;min-width:520px;height:auto;display:block;background:var(--bg);border:1px solid var(--line);border-radius:6px}
+.gl{stroke:var(--line);stroke-dasharray:2 4}.ln{stroke:var(--acc2);stroke-width:3}
+.pt{fill:var(--acc);stroke:var(--ink)}svg text{fill:var(--ink);font:11px sans-serif}
+.card{margin:12px 0;padding:22px 16px;text-align:center;background:var(--btn);color:var(--btnink);border:2px solid var(--acc);border-radius:8px}
+.card b{display:block;color:#fff;font-size:18px;margin-bottom:8px}
+.card code{font:700 15px ui-monospace,Consolas,monospace;word-break:break-all}
+.big{font:700 26px Georgia,serif;text-align:center;margin:14px 0}
+.hist{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:12px}
+@media(max-width:700px){.hist{grid-template-columns:1fr}}
+#hl{max-height:380px;overflow:auto;border:1px solid var(--line);border-radius:6px}
+#hl button{display:block;width:100%;text-align:left;padding:8px 10px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);font:13px inherit;font-family:inherit;cursor:pointer}
+#hl button:hover,#hl button.sel{background:var(--acc);color:#fff}
+footer{max-width:980px;margin:0 auto;padding:0 20px 24px;color:var(--mut);font-size:13px}
+:root[data-theme="dark"]{--bg:#000;--panel:rgba(10,10,12,.8);--ink:#ddd;--mut:#8a8a8a;--acc:#c4122f;--acc2:#ff4d5e;--line:#2a2a2a;--btn:#1c1c1c;--btnink:#ddd}
+html{background:#000}
+body{font:13px/1.35 "SF Mono",Menlo,Consolas,"Liberation Mono",monospace;letter-spacing:.02em}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+header,nav,main,footer{position:relative;z-index:1}
+header{display:flex;gap:14px;align-items:center;max-width:none;margin:0;padding:24px}
+header p{font-size:11px;margin:2px 0 0}
+h1{font-size:20px;font-weight:400;font-family:inherit;color:#fff;letter-spacing:.02em}
+h2{font-size:13px;font-weight:600;font-family:inherit;color:var(--acc2)}
+h1,h2,label,nav button,.b,footer,header p{text-transform:uppercase}
+input,select,textarea{text-transform:none;font-size:14px;border-radius:2px}
+.big{font-family:inherit}
+nav button{border-radius:2px 2px 0 0;font-size:12px}
+nav button[aria-selected="true"]{background:#e6e6e6;color:#000}
+section{background:var(--panel);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:0 2px 2px 2px}
+.counter{position:fixed;top:24px;right:24px;z-index:2;width:44px;height:44px;border:1px solid var(--line);border-radius:50%;background:#0a0a0a;color:#fff;display:grid;place-items:center;font-size:14px}
+@media(min-width:1100px){nav,main,footer{margin-left:24px;margin-right:auto;max-width:800px}}
+.hero{position:relative;z-index:1;overflow:hidden;margin:0 0 24px}
+.wm{position:absolute;left:24px;top:24px;font:400 100px/1 Anton,Impact,sans-serif;color:#e5243b;white-space:nowrap;text-transform:uppercase;pointer-events:none}
+.wm span{display:inline-block;clip-path:inset(-5% 100% -5% 0)}
+.eye-loaded .wm span{clip-path:inset(-5% -2% -5% 0);transition:clip-path .5s cubic-bezier(.65,0,.35,1) calc(var(--i)*.07s)}
+.cv{position:absolute;top:var(--y,300px);width:var(--cw,300px);aspect-ratio:3/4;height:calc(var(--cw,300px)*1.3333);transform-origin:50% 0;transform:translateY(calc(100vh + 20%)) rotate(var(--r));box-shadow:0 14px 40px rgba(0,0,0,.55);padding:16px;color:#fff;text-decoration:none;display:flex;flex-direction:column;justify-content:space-between;border-radius:2px}
+.cv:nth-of-type(1){left:4%}.cv:nth-of-type(2){left:calc(50% - var(--cw,300px)/2)}.cv:nth-of-type(3){right:4%}
+.cv b{font:400 clamp(28px,5vw,48px)/1 Anton,Impact,sans-serif;text-transform:uppercase}.cv small{font-size:11px;text-transform:uppercase}
+.eye-loaded .cv{transform:rotate(var(--r));transition:transform 1s cubic-bezier(.16,1,.3,1) var(--d)}
+.eye-static .wm span,.eye-static .cv{transition:none!important}
+.lead{margin:0 0 20px;color:var(--mut)}
+.tl{list-style:none;margin:0 0 24px;padding:0 0 0 22px;border-left:1px solid var(--line)}
+.tl li{position:relative;margin:0 0 26px;padding:0}
+.tl li::before{content:"";position:absolute;left:-27.5px;top:4px;width:9px;height:9px;border-radius:50%;background:var(--acc2);box-shadow:0 0 0 4px var(--panel)}
+.yr{display:inline-block;padding:3px 9px;background:var(--acc);color:#fff;font-size:11px;letter-spacing:.06em;border-radius:2px}
+.tl h3{margin:10px 0 8px;font-size:15px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.02em}
+.tl p{margin:0 0 10px;max-width:68ch}
+.fm{margin:10px 0;padding:12px 16px;background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--acc2);border-radius:2px;font-size:16px;color:#fff;overflow-x:auto;white-space:nowrap}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
+<script>
+(()=>{try{
+const E=document.documentElement,$=s=>document.querySelector(s);
+/* ---- подгонка слова и карточек ---- */
+const fit=()=>{const w=$('.wm'),h=$('.hero');if(!w)return;w.style.fontSize='100px';w.style.right='auto';const r=w.offsetWidth||1;
+ const fs=100*(innerWidth-48)/r;w.style.fontSize=fs+'px';w.style.right='24px';
+ const cw=innerWidth<760?innerWidth*.42:Math.min(innerWidth*.3,300),y=24+fs*.8;
+ h.style.setProperty('--cw',cw+'px');h.style.setProperty('--y',y+'px');h.style.height=(y+cw*.62)+'px'};
+addEventListener('DOMContentLoaded',()=>{fit();document.fonts&&document.fonts.load('100px Anton').then(fit,function(){});
+ document.querySelectorAll('.cv').forEach(a=>a.onclick=e=>{e.preventDefault();$('[data-t="'+a.dataset.t+'"]').click();$('#tabs').scrollIntoView({behavior:'smooth'})})});
+addEventListener('resize',fit);
+/* ---- загрузчик ---- */
+if(matchMedia('(prefers-reduced-motion:reduce)').matches){E.classList.add('eye-loaded','eye-static');return}
+const st=document.createElement('style');st.textContent='html::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:#0c0907;z-index:2147483646;pointer-events:none}';document.head.appendChild(st);
+const ov=E.style.overflow;E.style.overflow='hidden';
+const cv=document.createElement('canvas');cv.setAttribute('aria-hidden','true');cv.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;z-index:2147483647;display:block;background:transparent;pointer-events:none';E.appendChild(cv);
+const g=cv.getContext('2d'),rem=document.createElement('canvas'),rg=rem.getContext('2d');
+const RAMP=" .`-':,_^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@",L=RAMP.length-1;
+const lerp=(a,b,t)=>a+(b-a)*t,mixc=(a,b,t)=>a.map((v,i)=>lerp(v,b[i],t));
+const deep=[60,14,20],AC=[225,40,60],CR=[243,234,216],WH=[255,255,255];
+const ramp=st=>[...Array(16)].map((_,i)=>{const p=i/15*(st.length-1),k=Math.min(st.length-2,Math.floor(p)),c=mixc(st[k],st[k+1],p-k);return 'rgb('+c.map(Math.round)+')'});
+const OR=ramp([deep,[140,25,40],AC,[255,170,175],WH]),CRR=ramp([deep,mixc(CR,[12,9,7],.62),CR,WH]);
+const ez=x=>{x=Math.max(0,Math.min(1,x));return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const CW=10,CH=16,TD=6.235,DUR=1.3;let W,H,dpr,cols,rows,rnd,dust,sp=[],unit0;
+const size=()=>{dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;cols=Math.ceil(W/CW);rows=Math.ceil(H/CH);
+ rnd=Float32Array.from({length:cols*rows},()=>Math.random());dust=Float32Array.from({length:cols*rows},()=>Math.random()<.55?.03+Math.random()*.1:0);
+ sp=[...Array(Math.min(200,Math.round(W*H/8000)))].map(()=>({x:Math.random()*W,y:Math.random()*H,s:7+48*Math.pow(Math.random(),3.2),b:4.935+Math.random()*.975,f:2+Math.random()*3,p:Math.random()*6.28}))};
+size();
+const K=[[0,0,0],[.12,0,0],[.24,-.42,.02],[.4,-.42,.02],[.5,.38,-.04],[.64,.38,-.04],[.74,-.12,-.16],[.86,-.12,-.16],[1,0,0]];
+const gaze=f=>{for(let i=1;i<K.length;i++)if(f<=K[i][0]){const a=K[i-1],b=K[i],e=ez((f-a[0])/(b[0]-a[0]));return[lerp(a[1],b[1],e),lerp(a[2],b[2],e)]}return[0,0]};
+let S={};
+function eye(x,y){let b=0,rp=1,ps=.5;const hf=S.hf,r=Math.hypot(x,y);
+ const q=Math.pow(Math.abs(x),4)+Math.pow(Math.abs(y)/.74,4);
+ if(q<1&&hf>0){const dm=1-.32*q;b=.95*dm*(1-.12*y)*hf*(q>.92?.55:1);ps=.6+.2*dm;
+  for(const sx of[-1,1])for(const sy of[-1,1]){const d=Math.hypot(x-sx*.82,y-sy*.47);if(d<.025){b=.85*hf;ps=.9}else if(d<.055){b=.2*hf;ps=.25}}}
+ if(r<.67&&r>=.6&&hf>0){b=.22*hf;rp=0;ps=.08}
+ const top=-(.5+S.lift)*S.o,bot=.5*S.o;
+ if(r<.6&&hf>0){b=(.13+.45*Math.exp(-Math.pow((r-.6)/.03,2)))*hf*(1-.5*Math.exp(-(y-top)/.1));rp=0;ps=.2}
+ const ix=S.gx*.5,iy=S.gy*.5,R=.47*(1-.06*S.m)*(1+.015*Math.sin(S.t*9)),p=2-1.5*S.m,dx=x-ix,dy=y-iy;
+ const rr=Math.pow(Math.pow(Math.abs(dx),p)+Math.pow(Math.abs(dy),p),1/p)/R;
+ if(rr<1&&(y>top&&y<bot||S.m>.3)){rp=0;const rings=.5+.5*Math.cos(rr*9*Math.PI),sh=1-.55*Math.exp(-(y-top)/.12);
+  let bi=(.74+.22*rings)*(rr>.9?.55:1)*(rr<.5?.9:1)*(1+.15*dy/R)*sh,pi=.58+.2*(1-rr)+.08*rings;
+  const bs=.62+.35*(1-rr)+.3*S.sp,pst=.5+.22*(1-rr)+.35*S.sp;b=lerp(bi,bs,S.m);ps=lerp(pi,pst,S.m);
+  if(S.m<.02){const pr=.39*(1+.05*Math.sin(S.t*1.6));if(rr<pr){b=.02;ps=.1}
+   if(Math.abs(dx/R+.36)<.14&&Math.abs(dy/R+.36)<.14&&Math.abs(dx/R+.36)>.011&&Math.abs(dy/R+.36)>.011){b=1;rp=1;ps=1}}}
+ else if(hf>0&&((y<top&&(r<.6||(Math.abs(x)<.64&&y>top-.17)))||(y>bot&&(r<.6||(Math.abs(x)<.64&&y<bot+.17))))){
+  const e=Math.min(Math.abs(y-top),Math.abs(y-bot));rp=0;ps=.56+(e<.025?.15:0);b=((Math.floor(y/.042)&1)?.95:.7)*(1-.3*Math.pow(Math.abs(x)/.64,4))*hf+(e<.025?.25:0)}
+ return[b,rp,ps]}
+let t=0,last=0,raf=0,dis=false,done=false,blocks,dat,parts=[],evd=false;
+const finish=()=>{E.classList.add('eye-loaded');cancelAnimationFrame(raf);cv.remove();st.remove();E.style.overflow=ov;removeEventListener('resize',size);document.dispatchEvent(new CustomEvent('eyeloader:done'))};
+const startDis=()=>{dis=true;cv.style.pointerEvents='none';rem.width=cv.width;rem.height=cv.height;rg.drawImage(cv,0,0);dat=rg.getImageData(0,0,rem.width,rem.height).data;
+ const B=12,nx=Math.ceil(W/B),ny=Math.ceil(H/B),seeds=sp.map(s=>[s.x,s.y,s.s]).concat([[W/2,H/2,unit0*1.9*.47*2.2]]);let mx=1;blocks=[];
+ for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const cx=i*B+B/2,cy=j*B+B/2;let d=1e9;for(const s of seeds)d=Math.min(d,Math.max(0,Math.hypot(cx-s[0],cy-s[1])-1.2*s[2])/(1+s[2]/30));mx=Math.max(mx,d);blocks.push({x:i*B,y:j*B,d})}
+ blocks.forEach(k=>k.t=(.72*k.d/mx+.15*Math.random())*DUR)};
+const skip=()=>{if(t<TD)t=TD};addEventListener('pointerdown',skip,true);addEventListener('keydown',skip,true);
+const frame0=now=>{raf=requestAnimationFrame(frame);const dt=Math.min((now-last)/1000,.1);last=now;t+=dt;
+ g.setTransform(dpr,0,0,dpr,0,0);
+ if(dis){const td=t-TD;if(!evd&&td>DUR*.25){evd=true;E.classList.add('eye-loaded')}
+  rg.save();let alive=0;for(const k of blocks){if(k.gone)continue;alive++;if(td>=k.t){k.gone=1;rg.clearRect(k.x*dpr,k.y*dpr,12*dpr,12*dpr);
+   const o=(Math.floor((k.y+6)*dpr)*rem.width+Math.floor((k.x+6)*dpr))*4,lu=(dat[o]*.3+dat[o+1]*.59+dat[o+2]*.11)/255;
+   if(lu>.32)parts.push({x:k.x,y:k.y,vx:(Math.random()-.5)*280,vy:-60-Math.random()*220,l:1,c:'rgb('+dat[o]+','+dat[o+1]+','+dat[o+2]+')',s:lu>.62?6:12})}}
+  rg.restore();g.clearRect(0,0,W,H);g.drawImage(rem,0,0,W,H);
+  parts=parts.filter(p=>p.l>0);for(const p of parts){p.vy+=900*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.l-=dt;g.globalAlpha=Math.max(0,p.l);g.fillStyle=p.c;g.fillRect(p.x,p.y,p.s,p.s)}g.globalAlpha=1;
+  if(td>DUR&&!alive&&!parts.length&&!done){done=true;finish()}
+  return}
+ if(t>=TD){startDis();return}
+ const o=ez((t-.5)/1),[gx,gy]=gaze(ez(0)+Math.max(0,Math.min(1,(t-1.5)/2)));
+ let op=.04+.96*o;if(t>2.4&&t<2.64)op*=1-.97*Math.sin(Math.PI*(t-2.4)/.24);
+ const z=1+.9*ez((t-3.5)/1.3),m=ez((t-4.215)/1.2),spk=ez((t-4.935)/1.3);
+ unit0=Math.min(W*.37,H*.6);const un=unit0*z;
+ S={t,o:op,gx,gy,lift:.06*Math.max(0,-gy),m,sp:spk,hf:1-m};
+ g.fillStyle='#0c0907';g.fillRect(0,0,W,H);g.font='600 12px ui-monospace,Menlo,Consolas,monospace';g.textBaseline='middle';g.textAlign='center';
+ const fl=Math.floor(t*12);
+ for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){const id=j*cols+i,ap=rnd[id]*.33+j/rows*.12,fa=Math.max(0,Math.min(1,(t-ap)/.15));if(!fa)continue;
+  const cx=i*CW+CW/2,cy=j*CH+CH/2,[bb,rp,ps]=eye((cx-W/2)/un,(cy-H/2)/un);let b=bb;
+  if(b<=0)b=dust[id]*(t>4.9?.5:1);else b+=(((id*9301+fl*49297)%233280)/233280-.5)*.16;
+  if(j&1)b*=.84;const k=Math.round(Math.max(0,Math.min(1,b))*L);if(!k)continue;
+  g.globalAlpha=fa*(.3+.7*Math.min(1,b));g.fillStyle=(bb>0?(rp?CRR:OR):CRR)[Math.round(Math.max(0,Math.min(1,bb>0?ps:.05))*15)];g.fillText(RAMP[k],cx,cy)}
+ g.globalAlpha=1;
+ if(t>4.935){g.textAlign='center';for(const s of sp){const a=t-s.b;if(a<0)continue;const tw=.65+.35*Math.sin(a*s.f*6.283+s.p),fi=Math.min(1,a/.25),c=mixc(AC,[255,215,215],Math.min(1,a/.9)).map(Math.round).join();
+  g.globalAlpha=fi*tw;g.fillStyle=g.shadowColor='rgb('+c+')';g.shadowBlur=4+.35*s.s;g.font=s.s*(.75+.25*tw)*fi+'px system-ui,"Segoe UI Symbol",sans-serif';g.fillText('\u2726',s.x,s.y)}g.shadowBlur=0;g.globalAlpha=1}
+ if(t>4.215){const pr=ez((t-4.215)/(TD-4.215)),w=Math.min(260,W*.5);g.globalAlpha=Math.min(1,(t-4.215)*4);g.fillStyle='rgb(60,14,20)';g.fillRect(16,H-42,w,4);g.fillStyle='#e5243b';g.fillRect(16,H-42,w*pr,4);g.globalAlpha=1}};
+const frame=now=>{try{frame0(now)}catch(e){console.warn(e);if(!done){done=true;finish()}}};
+setTimeout(()=>{if(!done){done=true;finish()}},15000);
+Promise.race([document.fonts?document.fonts.ready:0,new Promise(r=>setTimeout(r,300))]).then(()=>{st.remove();last=performance.now();raf=requestAnimationFrame(frame)});
+}catch(e){document.documentElement.classList.add('eye-loaded','eye-static');console.warn(e)}})();
+</script>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<header>
+
+<div><h1>MATHCRYPT</h1>
+<p>Діофантові рівняння, RSA-шифрування та навчальні вправи — працює прямо в браузері.</p></div>
+</header>
+<div class="counter">09</div>
+<div class="hero"><div class="wm" role="img" aria-label="MATHCRYPT"><span aria-hidden="true" style="--i:0">M</span><span aria-hidden="true" style="--i:1">A</span><span aria-hidden="true" style="--i:2">T</span><span aria-hidden="true" style="--i:3">H</span><span aria-hidden="true" style="--i:4">C</span><span aria-hidden="true" style="--i:5">R</span><span aria-hidden="true" style="--i:6">Y</span><span aria-hidden="true" style="--i:7">P</span><span aria-hidden="true" style="--i:8">T</span></div>
+<a class="cv" href="#t-rsa" data-t="rsa" style="--r:-8deg;--d:.45s;z-index:1;background:linear-gradient(160deg,#e5243b,#7a0f1f)"><b>RSA</b><small>Ключі та шифрування тексту</small></a>
+<a class="cv" href="#t-dio" data-t="dio" style="--r:-4deg;--d:.57s;z-index:3;background:#f3ead8;color:#24151B"><b>ax+by=c</b><small>Діофантові рівняння та графік</small></a>
+<a class="cv" href="#t-prime" data-t="prime" style="--r:6deg;--d:.69s;z-index:2;background:#3a0f16"><b>Прості числа</b><small>Перевірка та розклад</small></a></div>
+<nav role="tablist" id="tabs"></nav>
+<main>
+
+<section id="t-dio"><h2>Розв’язання ax + by = c</h2>
+<div class="row"><label>a<input class="s" id="da" inputmode="numeric"></label><label>b<input class="s" id="db" inputmode="numeric"></label><label>c<input class="s" id="dc" inputmode="numeric"></label>
+<button class="b m" id="dgo">Розв’язати</button><button class="b" id="dex">Приклад</button></div>
+<div class="err" id="de"></div><pre id="dout">Введіть коефіцієнти та натисніть «Розв’язати».</pre>
+<h2>Графік цілочисельних розв’язків</h2><div class="wide" id="dg"></div></section>
+
+<section id="t-rsa"><h2>RSA: ключі та текст</h2>
+<div class="row"><label>p<input class="s" id="rp" value="17"></label><label>q<input class="s" id="rq" value="19"></label><label>e<input class="s" id="re" value="5"></label></div>
+<label>Текст для шифрування (будь-яка мова UTF-8)<input class="w" id="rm" value="Привіт, світе!"></label>
+<div class="row"><button class="b m" id="rk">Створити ключі</button><button class="b" id="renc">Зашифрувати текст</button><button class="b" id="rdec">Розшифрувати</button><button class="b" id="rex">Приклад</button></div>
+<div class="err" id="rerr"></div><pre id="rkey"></pre><pre id="rout">Натисніть «Зашифрувати текст».</pre></section>
+
+<section id="t-anim"><h2>Покрокове RSA-шифрування</h2>
+<p>Використовуються ключі й текст із вкладки «RSA».</p>
+<div class="row"><button class="b m" id="as">Почати</button><button class="b" id="ap">Попередній крок</button><button class="b" id="an">Наступний крок</button></div>
+<div class="err" id="aerr"></div><div class="card" id="acard"><b>Натисніть «Почати»</b></div><pre id="adet"></pre></section>
+
+<section id="t-prime"><h2>Прості числа та множники</h2>
+<div class="row"><label>Ціле число (до 10¹²)<input id="pn" inputmode="numeric" value="360"></label><button class="b m" id="pgo">Перевірити та розкласти</button></div>
+<div class="err" id="perr"></div><pre id="pout"></pre></section>
+
+<section id="t-gen"><h2>Генератор діофантових завдань</h2>
+<div class="row"><label>Рівень<select id="gl"><option>Легкий</option><option>Середній</option><option>Складний</option></select></label><button class="b m" id="gnew">Нове завдання</button></div>
+<div class="big" id="gp">Натисніть «Нове завдання»</div>
+<div class="row" style="justify-content:center"><label>x<input class="s" id="gx" inputmode="numeric"></label><label>y<input class="s" id="gy" inputmode="numeric"></label>
+<button class="b" id="gck">Перевірити</button><button class="b" id="ghint">Підказка / розв’язок</button></div>
+<div class="err" id="gerr"></div><pre id="gout">Знайдіть будь-яку пару цілих (x, y), що задовольняє рівняння. Якщо розв’язків немає, натисніть «Підказка / розв’язок».</pre></section>
+
+<section id="t-theory"><h2>Теоретичні матеріали</h2>
+<label>Розділ<select id="ts"></select></label><pre id="tout" style="max-height:none"></pre></section>
+
+<section id="t-prac"><h2>Практичні завдання</h2>
+<div class="big" id="qq" style="text-align:left;font-size:20px"></div>
+<div class="row"><label>Відповідь<input id="qa"></label><button class="b m" id="qck">Перевірити</button><button class="b" id="qnx">Наступне завдання</button></div>
+<pre id="qout"></pre></section>
+
+<section id="t-hist"><h2>Історія обчислень</h2>
+<p>Записи зберігаються в цьому браузері (до 300).</p>
+<div class="hist"><div id="hl"></div><pre id="hd" style="margin:0">Оберіть запис зліва.</pre></div>
+<div class="row"><button class="b" id="hclr">Очистити історію</button></div>
+<h2>Мої проєкти</h2>
+<p>Експортуйте стан у текст JSON, збережіть його де завгодно й вставте назад, щоб відновити.</p>
+<textarea id="pj" rows="6" class="w" aria-label="Проєкт у форматі JSON"></textarea>
+<div class="row"><button class="b m" id="pex">Експортувати проєкт</button><button class="b" id="pim">Імпортувати проєкт</button><button class="b" id="pcp">Копіювати</button></div>
+<div class="err" id="pst"></div></section>
+
+<section id="t-math"><h2>Історія математики та криптографії</h2>
+<p class="lead">Історія теорії чисел демонструє, як математичні ідеї, започатковані в античності, стали основою сучасних методів захисту інформації.</p>
+<ol class="tl">
+<li><span class="yr">III ст. н. е.</span><h3>1. Загадка віку Діофанта</h3><p>Згідно з відомою епітафією Діофанта Александрійського, тривалість його життя була зашифрована в математичній задачі. Його вік можна визначити за допомогою рівняння:</p><div class="fm">x/6 + x/12 + x/7 + 5 + x/2 + 4 = x</div><p>Відповідь: 84 роки. Це легендарна задача, а не достовірне біографічне свідчення, проте вона є цікавим прикладом історії математики.</p></li>
+<li><span class="yr">1637–1995</span><h3>2. Велика теорема Ферма</h3><p>П’єр Ферма стверджував, що рівняння</p><div class="fm">xⁿ + yⁿ = zⁿ</div><p>не має розв’язків у додатних цілих числах за умови n &gt; 2. Математики намагалися довести це твердження понад три століття. У 1990-х роках Ендрю Вайлс за участю Річарда Тейлора завершив доведення. Це один із найвідоміших прикладів дослідження діофантових рівнянь.</p></li>
+<li><span class="yr">1977</span><h3>3. Створення алгоритму RSA</h3><p>Рон Рівест, Аді Шамір та Леонард Адлеман розробили алгоритм RSA. Вони показали, як математичні властивості простих чисел можна використовувати для шифрування інформації та створення цифрових підписів. Особливе значення має рівняння:</p><div class="fm">ed − kφ(n) = 1</div><p>Це лінійне діофантове рівняння, пов’язане з обчисленням закритого показника RSA. Його застосування можна продемонструвати за допомогою програми MATHCRYPT.</p><button class="b m" onclick="document.querySelector('[data-t=rsa]').click();document.getElementById('tabs').scrollIntoView({behavior:'smooth'})">Відкрити RSA</button></li>
+<li><span class="yr">1973–1997</span><h3>4. Таємне відкриття RSA</h3><p>Британський математик Кліффорд Кокс розробив математично еквівалентний RSA алгоритм ще в 1973 році, працюючи в британській розвідувальній службі GCHQ. Однак його розробка була засекречена. Громадськість дізналася про це відкриття лише в 1997 році. Таким чином, подібний криптографічний алгоритм було незалежно відкрито двічі.</p></li>
+<li><span class="yr">1977–1994</span><h3>5. Злам RSA-129</h3><p>У 1977 році було опубліковано криптографічну задачу, засновану на числі зі 129 десяткових цифр. У 1994 році міжнародна команда дослідників змогла розкласти це число на прості множники та розшифрувати секретне повідомлення. Ця історія демонструє, чому розвиток обчислювальної техніки потребує постійного вдосконалення криптографічного захисту.</p></li>
+<li><span class="yr">1994</span><h3>6. Алгоритм Шора та майбутнє криптографії</h3><p>Пітер Шор розробив квантовий алгоритм, який дає змогу ефективно розкладати великі числа на прості множники за наявності достатньо потужного квантового комп’ютера. У майбутньому такі комп’ютери можуть поставити під загрозу безпеку RSA. Це зумовлює актуальність досліджень у галузі постквантової криптографії.</p></li>
+</ol>
+<h2>Висновок</h2>
+<p>Розглянуті історичні приклади ілюструють розвиток теорії чисел від античних математичних задач до сучасної криптографії. Створення RSA, злам RSA-129 та поява алгоритму Шора демонструють практичне значення математичних досліджень для інформаційної безпеки. У програмі MATHCRYPT можна передбачити окремий розділ «Історія математики та криптографії» з хронологією відкриттів, біографіями математиків та історичними задачами.</p></section>
+</main>
+<footer>Навчальна демонстрація. RSA тут працює без доповнення (padding) і не призначений для захисту реальних даних.</footer>
+<script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const isInt=v=>/^[+-]?\d+$/.test(String(v).trim());
+const md=(a,m)=>((a%m)+m)%m;
+const say=(id,t,ok)=>{const e=$(id);e.textContent=t||"";e.className="err"+(ok?" ok":"")};
+const put=(id,t)=>{$(id).textContent=t};
+
+// ---- математика ----
+function egcd(a,b){let or=a<0n?-a:a,r=b<0n?-b:b,os=1n,s=0n,ot=0n,t=1n;const st=[];
+ while(r){const q=or/r;st.push([or,r,q,or-q*r]);[or,r]=[r,or-q*r];[os,s]=[s,os-q*s];[ot,t]=[t,ot-q*t]}
+ let x=os,y=ot;if(a<0n)x=-x;if(b<0n)y=-y;return[or,x,y,st]}
+function solveDio(a,b,c){
+ const o=[`РІВНЯННЯ: ${a}x + (${b})y = ${c}`,""];
+ if(a===0n&&b===0n){o.push(c===0n?"Будь-які цілі x та y є розв’язками.":"Розв’язків немає: 0 не дорівнює ненульовому c.");return[o.join("\n"),null]}
+ const[d,u,v,st]=egcd(a,b);o.push("КРОК 1. АЛГОРИТМ ЕВКЛІДА");
+ st.forEach(([aa,bb,q,r])=>o.push(`${aa} = ${bb} · ${q} + ${r}`));
+ o.push(`НСД(a,b) = ${d}`,"","КРОК 2. УМОВА ІСНУВАННЯ",`Перевірка: ${c} mod ${d} = ${md(c,d)}.`);
+ if(md(c,d)!==0n){o.push(`${d} не ділить ${c}; цілих розв’язків немає.`);return[o.join("\n"),null]}
+ const k=c/d,x0=u*k,y0=v*k,sx=b/d,sy=-(a/d);
+ o.push("","КРОК 3. ЧАСТИННИЙ РОЗВ’ЯЗОК",`${a}·(${u}) + (${b})·(${v}) = ${d}`,`Множимо на ${k}: x₀ = ${x0}, y₀ = ${y0}.`,
+  "","КРОК 4. ЗАГАЛЬНИЙ РОЗВ’ЯЗОК",`x = ${x0} + (${sx})t`,`y = ${y0} + (${sy})t`,"де t — довільне ціле число.",
+  "","КРОК 5. ПЕРЕВІРКА",`${a}·(${x0}) + (${b})·(${y0}) = ${a*x0+b*y0}.`);
+ return[o.join("\n"),[a,b,c,x0,y0,sx,sy].map(Number)]}
+function mp(b,e,m){let r=1n;b%=m;while(e>0n){if(e&1n)r=r*b%m;b=b*b%m;e>>=1n}return r}
+function isPrime(n){if(n<2)return false;if(n%2===0)return n===2;for(let k=3;k*k<=n;k+=2)if(n%k===0)return false;return true}
+function makeKeys(p,q,e){
+ if(p>10n**12n||q>10n**12n)throw Error("p і q мають бути не більшими за 10¹².");
+ if(!isPrime(Number(p))||!isPrime(Number(q))||p===q)throw Error("p і q мають бути різними простими числами.");
+ const n=p*q,phi=(p-1n)*(q-1n);
+ if(!(1n<e&&e<phi))throw Error("Потрібно, щоб 1 < e < φ(n).");
+ if(egcd(e,phi)[0]!==1n)throw Error("НСД(e, φ(n)) має дорівнювати 1.");
+ return[n,phi,md(egcd(e,phi)[1],phi)]}
+function encText(msg,n,e){if(n<=255n)throw Error("Для текстового режиму потрібно n > 255. Виберіть більші прості p та q.");
+ const raw=[...new TextEncoder().encode(msg)];return[raw,raw.map(b=>mp(BigInt(b),e,n))]}
+function decText(nums,n,d){try{const by=nums.map(v=>{const r=mp(BigInt(v),d,n);if(r>255n)throw 0;return Number(r)});
+ return new TextDecoder("utf-8",{fatal:true}).decode(new Uint8Array(by))}catch(x){throw Error("Не вдалося розшифрувати. Перевірте ключ і зашифровані числа.")}}
+
+// ---- історія ----
+let H=[];try{H=JSON.parse(localStorage.getItem("mc_hist")||"[]");if(!Array.isArray(H))H=[]}catch(e){H=[]}
+const saveH=()=>{try{localStorage.setItem("mc_hist",JSON.stringify(H))}catch(e){}};
+function hadd(kind,summary,details){H.unshift({time:new Date().toLocaleString("uk-UA"),kind,summary,details});H.length=Math.min(H.length,300);saveH();renderH()}
+function renderH(){const l=$("#hl");l.textContent="";
+ if(!H.length){l.textContent="Історія порожня.";l.style.padding="10px";return}l.style.padding="0";
+ H.forEach((h,i)=>{const b=document.createElement("button");b.textContent=`${h.time} | ${h.kind}: ${h.summary}`;
+  b.onclick=()=>{$$("#hl button").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");put("#hd",h.details)};l.appendChild(b)})}
+$("#hclr").onclick=()=>{if(confirm("Очистити всю історію обчислень?")){H=[];saveH();renderH();put("#hd","Історію очищено.")}};
+
+// ---- вкладки ----
+const tabs=[["dio","Діофантові рівняння"],["rsa","RSA: текст і ключі"],["anim","RSA-анімація"],["prime","Прості числа"],["gen","Генератор завдань"],["theory","Теорія"],["prac","Практика"],["hist","Історія та проєкти"],["math","Історія математики"]];
+tabs.forEach(([id,name],i)=>{const b=document.createElement("button");b.textContent=name;b.setAttribute("role","tab");b.dataset.t=id;
+ b.onclick=()=>{$$("nav button").forEach(x=>x.setAttribute("aria-selected",x===b));$$("section").forEach(s=>s.classList.toggle("on",s.id==="t-"+id))};
+ $("#tabs").appendChild(b);if(!i)b.click()});
+
+// ---- діофантові + графік ----
+function graph(d){const el=$("#dg");
+ if(!d){el.innerHTML='<svg viewBox="0 0 700 120"><text x="350" y="60" text-anchor="middle" style="font-size:15px">Цілих розв’язків немає.</text></svg>';return}
+ const[a,b,c,x0,y0,sx,sy]=d,W=700,Hh=320,m=44,ts=[...Array(11)].map((_,i)=>i-5);
+ const xs=ts.map(t=>x0+sx*t),ys=ts.map(t=>y0+sy*t);
+ let x1=Math.min(...xs,x0-4),x2=Math.max(...xs,x0+4),y1=Math.min(...ys,y0-4),y2=Math.max(...ys,y0+4);
+ const xp=Math.max(2,(x2-x1)*.12),yp=Math.max(2,(y2-y1)*.12);x1-=xp;x2+=xp;y1-=yp;y2+=yp;
+ const X=x=>m+(x-x1)/(x2-x1)*(W-2*m),Y=y=>Hh-m-(y-y1)/(y2-y1)*(Hh-2*m);let s="";
+ for(let i=0;i<9;i++){const xx=X(x1+(x2-x1)*i/8),yy=Y(y1+(y2-y1)*i/8);s+=`<line class="gl" x1="${xx}" y1="${m}" x2="${xx}" y2="${Hh-m}"/><line class="gl" x1="${m}" y1="${yy}" x2="${W-m}" y2="${yy}"/>`}
+ s+=b?`<line class="ln" x1="${X(x1)}" y1="${Y((c-a*x1)/b)}" x2="${X(x2)}" y2="${Y((c-a*x2)/b)}"/>`:`<line class="ln" x1="${X(c/a)}" y1="${m}" x2="${X(c/a)}" y2="${Hh-m}"/>`;
+ ts.forEach(t=>{const x=x0+sx*t,y=y0+sy*t;if(x>=x1&&x<=x2&&y>=y1&&y<=y2)s+=`<circle class="pt" cx="${X(x)}" cy="${Y(y)}" r="${t?4:6}"/><text x="${X(x)+8}" y="${Y(y)-8}">(${x}; ${y})</text>`});
+ s+=`<text x="${W/2}" y="18" text-anchor="middle" style="font-size:14px">${a}x + (${b})y = ${c}</text>`;
+ el.innerHTML=`<svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Графік розв’язків">${s}</svg>`}
+function runDio(){try{if(!["da","db","dc"].every(k=>isInt($("#"+k).value)))throw 0}catch(e){say("#de","Введіть цілі a, b та c.");return}
+ say("#de","");const[a,b,c]=["da","db","dc"].map(k=>BigInt($("#"+k).value.trim()));
+ const[t,d]=solveDio(a,b,c);put("#dout",t);graph(d);hadd("Діофантове рівняння",`${a}x + (${b})y = ${c}`,t)}
+$("#dgo").onclick=runDio;
+$("#dex").onclick=()=>{$("#da").value=35;$("#db").value=22;$("#dc").value=1;runDio()};
+$("#da").value=35;$("#db").value=22;$("#dc").value=1;
+
+// ---- RSA ----
+const R={n:null,d:null,e:null,enc:null};
+const rsaIn=()=>{if(!["rp","rq","re"].every(k=>isInt($("#"+k).value)))throw Error("Введіть цілі p, q та e.");return["rp","rq","re"].map(k=>BigInt($("#"+k).value.trim()))};
+function genKeys(){try{const[p,q,e]=rsaIn(),[n,phi,d]=makeKeys(p,q,e);Object.assign(R,{n,d,e,enc:null});
+ const t=["ВІЗУАЛЬНЕ ПОЯСНЕННЯ ГЕНЕРАЦІЇ КЛЮЧІВ RSA","━".repeat(40),
+ `① Обираємо два різні прості числа: p = ${p}, q = ${q}.`,`② Обчислюємо модуль: n = p · q = ${p} · ${q} = ${n}.`,
+ `③ Обчислюємо функцію Ейлера: φ(n) = (p−1)(q−1) = ${phi}.`,`④ Обираємо e = ${e}, для якого 1 < e < φ(n) і НСД(e, φ(n)) = 1.`,
+ `⑤ Знаходимо d: e · d ≡ 1 (mod φ(n)); d = ${d}.`,"",`ВІДКРИТИЙ КЛЮЧ: (e, n) = (${e}, ${n})`,`ЗАКРИТИЙ КЛЮЧ: (d, n) = (${d}, ${n})`,"",
+ "Логіка: відкритий ключ використовують для шифрування,","а відповідний закритий ключ — для розшифрування.","Якщо n > 255, можна шифрувати окремі байти UTF-8."].join("\n");
+ say("#rerr","");put("#rkey",t);put("#rout","Ключі створено. Тепер натисніть «Зашифрувати текст».");hadd("Генерація RSA-ключів",`p=${p}, q=${q}, e=${e}; n=${n}`,t);return true}
+ catch(x){say("#rerr",x.message);return false}}
+$("#rk").onclick=genKeys;
+$("#renc").onclick=()=>{if(R.n===null&&!genKeys())return;const m=$("#rm").value;if(!m){say("#rerr","Введіть текст.");return}
+ try{const[raw,nums]=encText(m,R.n,R.e);R.enc=nums;say("#rerr","");
+ const t=`ТЕКСТОВЕ RSA-ШИФРУВАННЯ\n${"━".repeat(40)}\nПочатковий текст: ${m}\nБайти UTF-8: [${raw.join(", ")}]\n\nЗашифровані числа:\n[${nums.join(", ")}]\n\nКожен байт b зашифровано окремо за формулою c = b^e mod n.\nЦе навчальна схема без криптографічного доповнення (padding).`;
+ put("#rout",t);hadd("RSA — шифрування тексту",m,t)}catch(x){say("#rerr",x.message)}};
+$("#rdec").onclick=()=>{if(!R.enc){say("#rerr","Спочатку зашифруйте текст у цій сесії.");return}
+ try{const t=decText(R.enc,R.n,R.d),o=`РОЗШИФРУВАННЯ\nЗашифровані числа:\n[${R.enc.join(", ")}]\n\nВідновлений текст:\n${t}`;say("#rerr","");put("#rout",o);hadd("RSA — розшифрування",t,o)}catch(x){say("#rerr",x.message)}};
+$("#rex").onclick=()=>{$("#rp").value=17;$("#rq").value=19;$("#re").value=5;$("#rm").value="Привіт, світе!";genKeys()};
+
+// ---- RSA-анімація ----
+const A={s:[],i:0};
+function drawA(){if(!A.s.length)return;const[t,b,v]=A.s[A.i];
+ $("#acard").innerHTML=`<b></b><code></code>`;$("#acard b").textContent=`Крок ${A.i+1} / ${A.s.length}: ${t}`;$("#acard code").textContent=v.length>160?v.slice(0,157)+"…":v;put("#adet",b)}
+$("#as").onclick=()=>{try{const[p,q,e]=rsaIn(),[n,phi,d]=makeKeys(p,q,e),m=$("#rm").value;if(!m)throw Error("Введіть текст у вкладці RSA.");
+ const[raw,enc]=encText(m,n,e),dec=decText(enc,n,d);
+ A.s=[["Повідомлення","Беремо початкове повідомлення користувача.",m],["UTF-8","Кодуємо текст у послідовність байтів UTF-8.",`[${raw.join(", ")}]`],
+ ["Прості числа",`Обрано два різні прості числа p=${p} та q=${q}.`,`p=${p}   q=${q}`],["Модуль",`Обчислюємо n=p·q=${n}; φ(n)=(p−1)(q−1)=${phi}.`,`n=${n}   φ(n)=${phi}`],
+ ["Ключі",`Відкритий ключ (e,n)=(${e},${n}); закритий (d,n)=(${d},${n}).`,`e=${e}   d=${d}`],["Шифрування","Кожен байт m перетворюємо за формулою c=m^e mod n. Це навчальна схема без padding.",`[${enc.join(", ")}]`],
+ ["Розшифрування","Для кожного зашифрованого числа обчислюємо m=c^d mod n.",`[${raw.join(", ")}]`],["Відновлений текст","Отримані байти декодуємо як UTF-8. Повідомлення відновлено.",dec]];
+ A.i=0;say("#aerr","");drawA();hadd("RSA — покрокова демонстрація",m,A.s.map(([t,b,v],i)=>`${i+1}. ${t}\n${b}\n${v}`).join("\n\n"))}catch(x){say("#aerr",x.message)}};
+const mvA=dl=>{if(A.s.length){A.i=Math.max(0,Math.min(A.s.length-1,A.i+dl));drawA()}};
+$("#ap").onclick=()=>mvA(-1);$("#an").onclick=()=>mvA(1);
+
+// ---- прості числа ----
+$("#pgo").onclick=()=>{const s=$("#pn").value.trim();if(!isInt(s)){say("#perr","Введіть ціле число.");return}
+ const num=Number(s);if(Math.abs(num)>1e12){say("#perr","Для швидкої перевірки введіть число за модулем не більше 10¹².");return}say("#perr","");
+ const n=Math.abs(num),f=[];let rest=n,dv=2;while(dv*dv<=rest){while(rest%dv===0){f.push(dv);rest/=dv}dv=dv===2?3:dv+2}if(rest>1)f.push(rest);
+ const L=[`ДОСЛІДЖЕННЯ ЧИСЛА ${num}`,"━".repeat(40)];
+ if(num<2)L.push("Число не є простим: прості числа — натуральні числа, більші за 1.");
+ else if(f.length===1)L.push(`${num} — ПРОСТЕ число: воно має рівно два додатні дільники, 1 та ${num}.`);
+ else L.push(`${num} — СКЛАДЕНЕ число: воно має дільники, відмінні від 1 і себе.`);
+ if(n>1){L.push(`Розклад |${num}| на прості множники: ${f.join(" · ")}`,"Метод: послідовно ділимо число на найменший можливий простий дільник.")}
+ else L.push(num===0?"Для нуля скінченний розклад на прості множники не визначений.":"Одиниця не має простих множників.");
+ const t=L.join("\n\n");put("#pout",t);hadd("Перевірка простоти",String(num),t)};
+
+// ---- генератор ----
+let G=null;const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a,nz=l=>{let v=0;while(!v)v=ri(-l,l);return v};
+$("#gnew").onclick=()=>{const lv=$("#gl").value,l={"Легкий":9,"Середній":30,"Складний":100}[lv],a=nz(l),b=nz(l);
+ const c=lv==="Складний"&&Math.random()<.35?ri(-2*l,2*l):a*ri(-10,10)+b*ri(-10,10);G=[a,b,c];
+ put("#gp",`${a}x + (${b})y = ${c}`);$("#gx").value="";$("#gy").value="";say("#gerr","");
+ put("#gout","Знайдіть будь-яку пару цілих (x, y), що задовольняє рівняння. Якщо розв’язків немає, натисніть «Підказка / розв’язок».")};
+$("#gck").onclick=()=>{if(!G)return;if(!isInt($("#gx").value)||!isInt($("#gy").value)){say("#gerr","Введіть цілі значення x та y.");return}say("#gerr","");
+ const x=BigInt($("#gx").value.trim()),y=BigInt($("#gy").value.trim()),[a,b,c]=G.map(BigInt),ok=a*x+b*y===c;
+ const t=`Перевірка: ${a}·(${x}) + (${b})·(${y}) = ${a*x+b*y}.\n`+(ok?"Правильно!":`Неправильно: має бути ${c}.`);put("#gout",t);hadd("Генератор — перевірка",`${a}x + (${b})y = ${c}`,t)};
+$("#ghint").onclick=()=>{if(!G)return;const t=solveDio(...G.map(BigInt))[0];put("#gout",t);hadd("Генератор — розв’язок",`(${G.join(", ")})`,t)};
+
+// ---- теорія ----
+const TH={"Діофантові рівняння":"Діофантове рівняння — рівняння, для якого шукають цілочисельні розв’язки.\n\nЛінійне рівняння: ax + by = c, де a, b, c — цілі числа.\nЯкщо a та b не дорівнюють нулю одночасно, розв’язки існують тоді й лише тоді, коли НСД(a, b) ділить c.\n\nЯкщо (x₀, y₀) — один розв’язок і d = НСД(a, b), то всі розв’язки:\nx = x₀ + (b/d)t; y = y₀ − (a/d)t, де t — ціле число.",
+"Алгоритм Евкліда":"Алгоритм Евкліда знаходить найбільший спільний дільник двох чисел.\n\nПриклад: НСД(35, 22):\n35 = 22·1 + 13\n22 = 13·1 + 9\n13 = 9·1 + 4\n9 = 4·2 + 1\n4 = 1·4 + 0\nОтже, НСД(35, 22) = 1.\n\nРозширений алгоритм Евкліда також знаходить u, v, для яких au + bv = НСД(a, b).",
+"RSA-криптографія":"RSA — алгоритм криптографії з відкритим ключем.\n\n1. Вибираємо різні прості p та q.\n2. Обчислюємо n = pq та φ(n) = (p−1)(q−1).\n3. Вибираємо e, взаємно просте з φ(n).\n4. Обчислюємо d: ed ≡ 1 (mod φ(n)).\n5. Шифруємо число m: c = m^e mod n.\n6. Розшифровуємо: m = c^d mod n.\n\nПриклад: p=5, q=11, n=55, φ(n)=40, e=3, d=27.\nДля m=7: c=7³ mod 55=13.\n\nУвага: реалізація RSA в MATHCRYPT є навчальною і не призначена для захисту реальних конфіденційних даних."};
+Object.keys(TH).forEach(k=>{const o=document.createElement("option");o.textContent=k;$("#ts").appendChild(o)});
+$("#ts").onchange=()=>put("#tout",TH[$("#ts").value]);put("#tout",TH["Діофантові рівняння"]);
+
+// ---- практика ----
+const Q=[["Знайдіть НСД(35, 22).","1","Застосуйте алгоритм Евкліда: остання ненульова остача дорівнює 1."],
+["Чи має рівняння 6x + 9y = 4 цілі розв’язки? (так/ні)","ні","НСД(6, 9) = 3, але 4 не ділиться на 3."],
+["Знайдіть x для розв’язку 5x + 8y = 150, якщо y = 15.","6","5x = 150 − 8·15 = 30, отже x = 6."],
+["Обчисліть 7³ mod 55.","13","7³ = 343 = 55·6 + 13."],["Якщо p=5, q=11, чому дорівнює модуль RSA n?","55","n = p·q = 5·11 = 55."]];
+let qi=0;const showQ=()=>{put("#qq",`Завдання ${qi+1} із ${Q.length}. ${Q[qi][0]}`);$("#qa").value="";put("#qout","")};
+$("#qck").onclick=()=>{const[q,ex,expl]=Q[qi],a=$("#qa").value.trim().toLowerCase(),ok=a===ex||(ex==="ні"&&(a==="нет"||a==="no"));
+ const r=ok?"Правильно!":`Неправильно. Правильна відповідь: ${ex}.`;put("#qout",r+"\n"+expl);hadd("Практичне завдання",q,`Відповідь користувача: ${a}\n${r}\n${expl}`)};
+$("#qnx").onclick=()=>{qi=(qi+1)%Q.length;showQ()};showQ();
+
+// ---- проєкти ----
+$("#pex").onclick=()=>{$("#pj").value=JSON.stringify({format:"MATHCRYPT_PROJECT_V1",saved_at:new Date().toISOString(),
+ diophantine:{a:$("#da").value,b:$("#db").value,c:$("#dc").value},rsa:{p:$("#rp").value,q:$("#rq").value,e:$("#re").value},rsa_message:$("#rm").value,history:H},null,1);say("#pst","Проєкт експортовано в поле вище.",1)};
+$("#pcp").onclick=async()=>{try{await navigator.clipboard.writeText($("#pj").value);say("#pst","Скопійовано.",1)}catch(e){$("#pj").select();say("#pst","Виділено текст — скопіюйте вручну (Ctrl+C).")}};
+$("#pim").onclick=()=>{try{const d=JSON.parse($("#pj").value);
+ if(!d||d.format!=="MATHCRYPT_PROJECT_V1")throw Error("Невідомий формат проєкту.");
+ if(typeof d.diophantine!=="object"||typeof d.rsa!=="object"||!Array.isArray(d.history))throw Error("У файлі відсутні потрібні поля.");
+ ["a","b","c"].forEach(k=>$("#d"+k).value=d.diophantine[k]??"");["p","q","e"].forEach(k=>$("#r"+k).value=d.rsa[k]??"");$("#rm").value=d.rsa_message??"";
+ H=d.history.filter(v=>v&&["time","kind","summary","details"].every(k=>k in v)).slice(0,300);saveH();renderH();
+ Object.assign(R,{n:null,d:null,e:null,enc:null});say("#pst","Проєкт відкрито. Для RSA натисніть «Створити ключі».",1)}catch(x){say("#pst","Помилка відкриття: "+x.message)}};
+
+renderH();{const[t,d]=solveDio(35n,22n,1n);put("#dout",t);graph(d)}genKeys();
+</script>
+<script>
+(()=>{try{const T=window.THREE;if(!T)return;
+const cv=document.getElementById('bg'),N=innerWidth<760?128:256,dpr=Math.min(devicePixelRatio||1,2);
+const R=new T.WebGLRenderer({canvas:cv,antialias:false});if(!R.capabilities.isWebGL2||(R.extensions&&R.extensions.has&&!R.extensions.has('EXT_color_buffer_float')))return;
+R.setPixelRatio(dpr);R.setSize(innerWidth,innerHeight);R.setClearColor(0,1);
+const cam=new T.PerspectiveCamera(30,innerWidth/innerHeight,.1,1000),base=new T.Vector3(-1.17,0,6),tgt=base.clone();cam.position.copy(base);
+const sc=new T.Scene(),grp=new T.Group(),D=Math.PI/180;grp.position.set(.343,.16,-1);grp.rotation.set(-28.4*D,390*D,4.92*D);grp.scale.set(5,5,6);sc.add(grp);
+const o=new Float32Array(N*N*4);for(let i=0;i<N*N;i++){o[i*4]=Math.random()*2-1;o[i*4+1]=Math.random()*2-1;o[i*4+2]=Math.random()*2-1;o[i*4+3]=1}
+const oT=new T.DataTexture(o,N,N,T.RGBAFormat,T.FloatType);oT.needsUpdate=true;
+const mk=()=>new T.WebGLRenderTarget(N,N,{type:T.FloatType,minFilter:T.NearestFilter,magFilter:T.NearestFilter,depthBuffer:false});
+let A=mk(),B=mk(),cur=oT;
+const U={tPos:{value:oT},tOrigin:{value:oT},time:{value:0},HZ:{value:1},uM:{value:new T.Vector2(.5,.5)},uV:{value:new T.Vector2()},uP:{value:new T.Matrix4()},uMod:{value:grp.matrixWorld},uC:{value:new T.Matrix3()}};
+const sim=new T.ShaderMaterial({uniforms:U,vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}',fragmentShader:`varying vec2 vUv;uniform sampler2D tPos,tOrigin;uniform float time,HZ;uniform vec2 uM,uV;uniform mat4 uP,uMod;uniform mat3 uC;
+vec3 pot(vec3 p){return vec3(sin(p.y*3.1+p.z*2.3),sin(p.z*3.7+p.x*1.9),sin(p.x*2.9+p.y*3.3));}
+vec3 curl(vec3 p){vec3 e=vec3(.01,0.,0.);vec3 dx=pot(p+e.xyy)-pot(p-e.xyy),dy=pot(p+e.yxy)-pot(p-e.yxy),dz=pot(p+e.yyx)-pot(p-e.yyx);return normalize(vec3(dy.z-dz.y,dz.x-dx.z,dx.y-dy.x));}
+float sdf(vec3 p){p.z=sqrt(p.z*p.z+.0215)-sqrt(.012);if(length(p)>.8)return length(p)-.7;p=p.yzx;float a=atan(p.y,p.x);vec2 q=vec2(length(p.xy)-.28-.05*sin(2.*a+p.z*8.),p.z);return length(q)-.13;}
+vec3 nrm(vec3 p){vec2 e=vec2(.001,0.);return vec3(sdf(p+e.xyy)-sdf(p-e.xyy),sdf(p+e.yxy)-sdf(p-e.yxy),sdf(p+e.yyx)-sdf(p-e.yyx))/.002;}
+void main(){vec3 og=texture2D(tOrigin,vUv).xyz,p=texture2D(tPos,vUv).xyz;
+if(length(p)>.7)p/=2.;
+p+=curl(p*3.+time*.05)*.0006*HZ;
+vec3 g=nrm(p);float s=sdf(p);
+p+=cross(normalize(p),normalize(g))*.0005;p-=g*s*.5;p+=(og-p)*.0002*HZ;
+vec4 c=uP*uMod*vec4(p,1.);vec2 d=c.xy/c.w*.5+.5-uM;
+p+=uC*vec3(uV,0.)*exp(-dot(d,d)*300.)*.02*HZ;
+gl_FragColor=vec4(p,1.);}`});
+const simSc=new T.Scene(),simCam=new T.OrthographicCamera(-1,1,1,-1,0,1);simSc.add(new T.Mesh(new T.PlaneGeometry(2,2),sim));
+const pos=new Float32Array(N*N*3),rnd=new Float32Array(N*N*4);
+for(let i=0;i<N*N;i++){pos[i*3]=(i%N+.5)/N;pos[i*3+1]=(Math.floor(i/N)+.5)/N;for(let k=0;k<4;k++)rnd[i*4+k]=Math.random()}
+const geo=new T.BufferGeometry();geo.setAttribute('position',new T.BufferAttribute(pos,3));geo.setAttribute('random',new T.BufferAttribute(rnd,4));
+const PU={tPos:{value:oT},time:U.time,dpr:{value:dpr}};
+const mat=new T.ShaderMaterial({uniforms:PU,transparent:true,depthWrite:false,blending:T.AdditiveBlending,
+vertexShader:`attribute vec4 random;uniform sampler2D tPos;uniform float dpr;varying vec4 vR;varying float vS;
+void main(){vec3 p=texture2D(tPos,position.xy).xyz;p*=mix(1.,1.5,pow(random.y,150.));vec4 mv=modelViewMatrix*vec4(p,1.);float d=-mv.z;
+vS=smoothstep(2.,12.,d)*mix(.5,1.,random.z);vR=random;gl_PointSize=.04*dpr*2.*vS*(1000./d);gl_Position=projectionMatrix*mv;}`,
+fragmentShader:`uniform float time;varying vec4 vR;varying float vS;
+void main(){vec2 c=gl_PointCoord*2.-1.;float r=dot(c,c);if(r>1.||vS<.05)discard;
+vec3 col=vec3(mix(.35,.8,vR.x));col=mix(col,vec3(1.,.25,.3),pow(vR.z,100.));
+col*=.45+.55*sqrt(1.-r);col*=.5+(.4+sin(time*4.+vR.y*20.))*pow(vR.z,10.)*2.5;
+gl_FragColor=vec4(col*.6,1.);}`});
+const pts=new T.Points(geo,mat);pts.frustumCulled=false;grp.add(pts);
+let lx=0,ly=0,gx=0,gy=0;const cl=(v,m)=>Math.max(-m,Math.min(m,v));
+const mv=(x,y)=>{U.uV.value.set(cl((x-lx)/20,3),cl(-(y-ly)/20,3));lx=x;ly=y;U.uM.value.set(x/innerWidth,1-y/innerHeight);gx=x/innerWidth*2-1;gy=y/innerHeight*2-1};
+addEventListener('pointermove',e=>mv(e.clientX,e.clientY));
+addEventListener('touchmove',e=>{const t=e.touches[0];if(t)mv(t.clientX,t.clientY)},{passive:true});
+addEventListener('resize',()=>{R.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()});
+let t0=performance.now();const P=new T.Matrix4();
+let dead=false;const loop0=now=>{requestAnimationFrame(loop);const dt=Math.min((now-t0)/1000,.1);t0=now;U.time.value+=dt;U.HZ.value=dt*60;
+tgt.set(base.x-gx,base.y+gy*2,base.z);cam.position.lerp(tgt,.05);cam.lookAt(0,0,0);cam.updateMatrixWorld();grp.updateMatrixWorld();
+P.multiplyMatrices(cam.projectionMatrix,cam.matrixWorldInverse);U.uP.value.copy(P);U.uC.value.setFromMatrix4(cam.matrixWorld);
+U.tPos.value=cur;R.setRenderTarget(B);R.render(simSc,simCam);R.setRenderTarget(null);cur=B.texture;PU.tPos.value=cur;[A,B]=[B,A];
+U.uV.value.multiplyScalar(.9);R.render(sc,cam)};
+const loop=now=>{if(dead)return;try{loop0(now)}catch(e){dead=true;console.warn('particles off',e)}};
+requestAnimationFrame(loop);
+}catch(e){console.warn('particles off',e)}})();
+</script>
+</body>
+</html>
