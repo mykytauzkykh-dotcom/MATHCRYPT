@@ -1,4 +1,22 @@
 # Changelog
+
+All notable changes to this project are documented here. Versions follow the Zenodo releases.
+
+## Unreleased — repository infrastructure (2026-11-27)
+Documentation and tooling only. **No change to the application:** `source/`, `site/` and `offline/` are
+unchanged and `site/index.html` is still byte-identical to the file deposited on Zenodo.
+* README rewritten as a structured research-software description (abstract, background, objectives,
+  mathematical foundations, architecture diagrams, algorithms, validation, limitations, citation).
+* `CITATION.cff` completed from the published Zenodo/DataCite record: `date-released: 2026-11-25`, author
+  ORCID and affiliation, `repository-code`, both licences (MIT, CC-BY-4.0), version and latest-version DOIs.
+* New `docs/MATHEMATICAL_FOUNDATIONS.md`, `examples/` (worked examples + independent Python reference code),
+  `assets/screenshots/` (screenshots of 6.0.0).
+* New tests: `tests/python/` (pytest: reproducible build, metadata consistency, reference values),
+  `tests/run_builtin_suite.js` (CI runner for the 248 built-in tests), `tests/check_syntax.js`.
+* GitHub Actions: `ci.yml` (Python tests and lint, built-in suite in Chromium, CFF validation, link check),
+  `release-checksums.yml` (release asset + SHA-256 sums).
+* `requirements.txt`, `package.json` (development tooling only), `.gitignore`.
+* `SECURITY.md`: reporting channel set to GitHub private vulnerability reporting.
 ## 6.0.0 — final review (2026-11-26)
 * Report generator: the author, supervisor and institution fields are now empty and editable (no pre-filled personal data); the defence slide lists only the software author, Mykyta Uzkykh.
 * Post-quantum tables checked against NIST FIPS 203 (Tables 2–3), FIPS 204 (Tables 1–2) and FIPS 205 (Table 2): all sizes correct. SLH-DSA rows now use the official parameter-set names (SHA2/SHAKE); ML-KEM columns use the FIPS 203 terms (encapsulation/decapsulation key); the “from memory” note is replaced by the sources with DOIs.

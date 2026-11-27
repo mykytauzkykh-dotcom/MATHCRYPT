@@ -1,0 +1,8 @@
+# Generated single-file builds and archives: exclude from GitHub language statistics
+# so that the repository language reflects the sources in source/.
+site/index.html        linguist-generated=true
+offline/mathcrypt.html linguist-generated=true
+MATHCRYPT9.html        linguist-generated=true
+*.zip                  binary
+*.pdf                  binary
+*.png                  binary

@@ -1,0 +1,15 @@
+# MATHCRYPT has NO runtime dependencies: the application is a single static
+# HTML file (site/index.html) that runs in a web browser.
+#
+# Python is used only for development tasks:
+#   * source/build.py            - standard library only
+#   * tests/python/ (pytest)     - repository checks and independent reference values
+#   * tests/refs/*.py            - regenerate the SciPy/NumPy reference values
+#
+# Install with:  python -m pip install -r requirements.txt
+pytest>=8.0
+PyYAML>=6.0
+# Needed only to regenerate tests/refs/*.json (values used in the 6.0.0 release
+# were produced with NumPy 2.5.3 and SciPy 1.18.1):
+numpy>=2.0
+scipy>=1.13
