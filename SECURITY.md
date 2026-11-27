@@ -8,4 +8,9 @@
 
 **Known limitations:** see `docs/KNOWN_LIMITATIONS.md`. No formal third-party security audit has been performed.
 
-**Reporting.** Contact the maintainer (add your contact here: FILL_IN) with a description and reproduction steps. Please do not publish details before a fix is available.
+**Supported versions.** Only the latest release (6.0.0) receives fixes.
+
+**Reporting.** Please use GitHub's private vulnerability reporting: *Security* tab of this repository →
+*Report a vulnerability*. Include a description and reproduction steps, and do not publish details before a
+fix is available. Reports about the strength of the *educational* cryptography (for example, that textbook
+RSA is insecure) are expected behaviour and documented in `docs/KNOWN_LIMITATIONS.md`.

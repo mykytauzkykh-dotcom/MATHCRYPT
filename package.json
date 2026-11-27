@@ -1,0 +1,24 @@
+{
+  "name": "mathcrypt",
+  "version": "6.0.0",
+  "private": true,
+  "description": "Development tooling for MATHCRYPT 6.0 (browser test runner). The application itself has no npm dependencies.",
+  "license": "MIT",
+  "author": "Mykyta Uzkykh (https://orcid.org/0009-0001-7704-8083)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mykytauzkykh-dotcom/MATHCRYPT.git"
+  },
+  "scripts": {
+    "build": "python3 source/build.py",
+    "test:browser": "node tests/run_builtin_suite.js site/index.html",
+    "test:python": "python3 -m pytest tests/python -q",
+    "check:js": "node tests/check_syntax.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

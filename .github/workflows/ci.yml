@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Python tests, lint and reproducible build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install development dependencies
+        run: python -m pip install pytest PyYAML ruff
+      - name: Lint Python (examples, tests, build script)
+        run: ruff check --select E9,F63,F7,F82 source/build.py examples tests/python
+      - name: Unit tests and repository checks
+        run: python -m pytest tests/python -v
+
+  browser:
+    name: Built-in suite (Chromium)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install Playwright with Chromium
+        run: |
+          npm install --no-save playwright@1
+          npx playwright install --with-deps chromium
+      - name: JavaScript syntax check
+        run: node tests/check_syntax.js
+      - name: Run built-in MATHCRYPT test suite
+        run: node tests/run_builtin_suite.js site/index.html builtin_results.json
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: builtin-test-results
+          path: builtin_results.json
+
+  metadata:
+    name: CITATION.cff and documentation links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate CITATION.cff against the CFF 1.2.0 schema
+        uses: citation-file-format/cffconvert-github-action@2.0.0
+        with:
+          args: "--validate"
+      - name: Check links in Markdown files
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress --max-retries 3 --timeout 30
+            --accept 200,206,429
+            --exclude-path docs/history
+            './**/*.md' CITATION.cff
+          fail: true

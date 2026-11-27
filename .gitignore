@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Node / Playwright (development only)
+node_modules/
+package-lock.json
+playwright-report/
+test-results/
+
+# Files written by the browser test scripts
+tests/*.zip
+pk.zip
+rep_short.pdf
+rep_full.pdf
+builtin_results.json
+
+# Editors and operating systems
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Local secrets must never be committed
+.env
+.env.*

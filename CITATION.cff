@@ -1,40 +1,62 @@
+# Citation metadata for MATHCRYPT 6.0.0.
+# Aligned with the published Zenodo record https://doi.org/10.5281/zenodo.24540765
+# (DataCite metadata checked 2026-11-27). Keep in sync with source/modules/m9j.js
+# and the metadata block in source/build.py.
 cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
 type: software
 title: "MATHCRYPT 6.0: An Interactive Computational Research Platform for Diophantine Equations, Number Theory, and Modern Cryptography"
 version: "6.0.0"
-license: MIT
+date-released: "2026-11-25"
 doi: "10.5281/zenodo.24540765"
+license:
+  - MIT
+  - CC-BY-4.0
+repository-code: "https://github.com/mykytauzkykh-dotcom/MATHCRYPT"
 url: "https://quiet-haupia-3167e1.netlify.app"
-# date-released: "YYYY-MM-DD"   # optional
 authors:
   - family-names: "Uzkykh"
     given-names: "Mykyta"
-    # orcid: "https://orcid.org/XXXX-XXXX-XXXX-XXXX"   # optional
+    orcid: "https://orcid.org/0009-0001-7704-8083"
+    affiliation: "Kharkiv Private Lyceum \"Kharkiv Collegium\", Kharkiv, Ukraine"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.24540765"
-    description: "DOI of the scientific software MATHCRYPT 6.0.0 (Zenodo)"
-  - type: url
-    value: "https://doi.org/10.5281/zenodo.24540765"
-    description: "DOI URL"
+    description: "Version DOI of MATHCRYPT 6.0.0 (Zenodo)"
+  - type: doi
+    value: "10.5281/zenodo.24540764"
+    description: "DOI that resolves to the latest version (IsVersionOf relation in the Zenodo/DataCite record)"
   - type: url
     value: "https://quiet-haupia-3167e1.netlify.app"
     description: "Online platform"
-abstract: "Browser-based educational and research platform for Diophantine equations, number theory and cryptography with reproducible experiments."
+abstract: >-
+  Browser-based educational and research platform for Diophantine equations,
+  number theory and cryptography with reproducible experiments. It provides
+  exact-arithmetic tools for linear Diophantine equations and systems over the
+  integers (Smith and Hermite normal forms), Pell equations, continued
+  fractions and lattice reduction, together with educational modules on RSA,
+  Diffie-Hellman, elliptic curves, hash functions, post-quantum cryptography
+  and classically simulated quantum algorithms. The cryptographic and quantum
+  modules are intended for education and research, not for production security.
 keywords:
   - Diophantine equations
-  - Euclidean algorithm
   - number theory
-  - cryptography
-  - RSA
-  - lattices
+  - Euclidean algorithm
+  - modular arithmetic
+  - Smith normal form
+  - Hermite normal form
+  - Pell equations
+  - lattice reduction
+  - RSA cryptography
+  - post-quantum cryptography
+  - research software
   - reproducible research
 preferred-citation:
   type: software
   title: "MATHCRYPT 6.0: An Interactive Computational Research Platform for Diophantine Equations, Number Theory, and Modern Cryptography"
   version: "6.0.0"
   year: 2026
+  date-released: "2026-11-25"
   doi: "10.5281/zenodo.24540765"
   url: "https://doi.org/10.5281/zenodo.24540765"
   publisher:
@@ -42,4 +64,4 @@ preferred-citation:
   authors:
     - family-names: "Uzkykh"
       given-names: "Mykyta"
-# repository-code: "https://github.com/FILL_IN/FILL_IN"
+      orcid: "https://orcid.org/0009-0001-7704-8083"
